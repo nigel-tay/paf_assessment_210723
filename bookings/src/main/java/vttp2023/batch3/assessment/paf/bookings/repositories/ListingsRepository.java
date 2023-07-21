@@ -1,5 +1,6 @@
 package vttp2023.batch3.assessment.paf.bookings.repositories;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +21,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 
 import vttp2023.batch3.assessment.paf.bookings.models.BookingForm;
+import vttp2023.batch3.assessment.paf.bookings.models.Reservation;
 import vttp2023.batch3.assessment.paf.bookings.models.Vacancy;
 
 @Repository
@@ -152,9 +154,28 @@ public class ListingsRepository {
 		System.out.println(id);
 		List<Vacancy> vacancyList = jTemplate.query(GET_VACANCY_SQL, BeanPropertyRowMapper.newInstance(Vacancy.class), Integer.parseInt(id));
 		Integer vacancy = vacancyList.get(0).getVacancy();
-		System.out.println("HERE>>>>>>>>>>>>>>>>>>>>"+vacancy);
 		
-		return false;
+		return stay > vacancy ? false : true;
 	}
+
+	private String INSERT_RESERVATION_SQL = 
+        """
+            INSERT INTO reservations (resv_id, name, email, acc_id, arrival_date, duration)
+            VALUES (?, ?, ?, ?, ?, ?);
+        """;
+
+    public boolean insertReservation(Reservation reservation) {
+
+        String resv_id = reservation.getResv_id();
+		String name = reservation.getName();
+		String email = reservation.getEmail();
+		String acc_id = reservation.getAcc_id();
+		Date arrivalDate = reservation.getArrival_date();
+		Integer duration = reservation.getDuration();
+        
+        int result = jTemplate.update(INSERT_RESERVATION_SQL, resv_id, name, email, acc_id, arrivalDate, duration);
+		System.out.println(result);
+        return result > 0 ? true: false;
+    }
 
 }
