@@ -1,0 +1,2 @@
+// cd into data directory before running command
+mongoimport -hlocalhost:27017 -dbookings -clistings --type=json listings.json
