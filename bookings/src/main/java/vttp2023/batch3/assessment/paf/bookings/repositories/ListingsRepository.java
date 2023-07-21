@@ -1,6 +1,7 @@
 package vttp2023.batch3.assessment.paf.bookings.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +13,23 @@ import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.aggregation.SortOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
+
+import vttp2023.batch3.assessment.paf.bookings.models.BookingForm;
+import vttp2023.batch3.assessment.paf.bookings.models.Vacancy;
 
 @Repository
 public class ListingsRepository {
 
 	@Autowired
 	MongoTemplate mTemplate;
+
+	@Autowired
+	JdbcTemplate jTemplate;
 
 	private final String C_LISTINGS = "listings";
 	private final String A_ADDRESS_COUNTRY = "address.country";
@@ -31,8 +41,9 @@ public class ListingsRepository {
 	private final String A_DESCRIPTION = "description";
 	private final String A_ID = "_id";
 	private final String A_IMAGE = "images.picture_url";
-	private final String A_NAME = "name";
 	private final String A_PRICE = "price";
+
+	private final String GET_VACANCY_SQL = "SELECT vacancy FROM acc_occupancy WHERE acc_id = ?";
 
 	//TODO: Task 2
 	/**
@@ -94,7 +105,6 @@ public class ListingsRepository {
 		Aggregation aggregation = Aggregation.newAggregation(mo, so, po);
 		List<Document> listingDocuments = mTemplate.aggregate(aggregation, C_LISTINGS, Document.class).getMappedResults();
 		
-		System.out.println(listingDocuments.toString());
 		return listingDocuments;
 	}
 
@@ -133,20 +143,18 @@ public class ListingsRepository {
 		Aggregation aggregation = Aggregation.newAggregation(mo, po);
 		List<Document> detailsList = mTemplate.aggregate(aggregation, C_LISTINGS, Document.class).getMappedResults();
 
-		System.out.println(">>>>>>>>>>>>>>> repository "+detailsList.get(0).toString());
 		return detailsList;
 	}
 
-		// A_ID
-	// A_DESCRIPTION
-	// A_ADDRESS
-	// A_ADDRESS_SUBURB
-	// A_ADDRESS_COUNTRY
-	// A_IMAGE
-	// A_PRICE
-	// A_AMENITITES
-
 	//TODO: Task 5
-
+	public Boolean checkVacancy(Integer stay, String id) {
+		// List<String> resultList = jTemplate.query(GET_VACANCY_SQL, BeanPropertyRowMapper.newInstance(String.class), id);
+		System.out.println(id);
+		List<Vacancy> vacancyList = jTemplate.query(GET_VACANCY_SQL, BeanPropertyRowMapper.newInstance(Vacancy.class), Integer.parseInt(id));
+		Integer vacancy = vacancyList.get(0).getVacancy();
+		System.out.println("HERE>>>>>>>>>>>>>>>>>>>>"+vacancy);
+		
+		return false;
+	}
 
 }

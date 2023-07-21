@@ -76,7 +76,6 @@ public class ListingsController {
 		List<Listing> listingsList = lService.getListingsFromMongo(country, numberOfPerson, min, max);
 		m.addAttribute("country", country);
 		m.addAttribute("listingsList", listingsList);
-		System.out.println(session.getAttribute("search"));
 		return "listings";
 	}
 
@@ -84,6 +83,9 @@ public class ListingsController {
 	@GetMapping("/details/{id}")
 	public String getDetails(@PathVariable String id, Model m, HttpSession session) {
 		Details singleDetails = lService.getDetails(id);
+
+		// Add id into session so that we can use it in booking later
+		session.setAttribute("acc_id", id);
 
 		String country = session.getAttribute("country").toString();
 		String numberOfPerson = session.getAttribute("numberOfPerson").toString();
@@ -101,9 +103,9 @@ public class ListingsController {
 
 	//TODO: Task 5
 	@PostMapping(path="/book", consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public String bookListing(@ModelAttribute BookingForm bookingForm) {
-		System.out.println(bookingForm.getEmail());
-
+	public String bookListing(@ModelAttribute BookingForm bookingForm, HttpSession session) {
+		// Pass entire booking object to service
+		lService.bookListing(bookingForm, session.getAttribute("acc_id").toString());
 		return "";
 	}
 

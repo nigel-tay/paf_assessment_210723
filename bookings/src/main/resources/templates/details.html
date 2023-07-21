@@ -40,8 +40,8 @@
                 Email:
                 <input type="email" th:field="*{email}" placeholder="Your email">
             </p>
-            <div data-th-if="${#fields.hasErrors('date')}">
-                <span data-th-errors="*{date}" style="color: red; font-family: monospace;"></span>
+            <div data-th-if="${#fields.hasErrors('arrival')}">
+                <span data-th-errors="*{arrival}" style="color: red; font-family: monospace;"></span>
             </div>
             <p>
                 Arrival:

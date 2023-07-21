@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookingForm {
-
     @NotNull(message="Please enter name")
     @NotEmpty(message="Please enter name")
     private String name;

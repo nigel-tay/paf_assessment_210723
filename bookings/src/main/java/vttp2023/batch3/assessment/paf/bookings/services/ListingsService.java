@@ -7,6 +7,7 @@ import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import vttp2023.batch3.assessment.paf.bookings.models.BookingForm;
 import vttp2023.batch3.assessment.paf.bookings.models.Details;
 import vttp2023.batch3.assessment.paf.bookings.models.Listing;
 import vttp2023.batch3.assessment.paf.bookings.repositories.ListingsRepository;
@@ -49,7 +50,6 @@ public class ListingsService {
 			listing.setImage(listingDoc.getString("picture_url"));
 			listingsList.add(listing);
 		}
-		System.out.println(listingsList);
 		return listingsList;
 	}
 
@@ -71,11 +71,14 @@ public class ListingsService {
 		details.setPrice(detailsDoc.getDouble("price"));
 		details.setAmenities(detailsDoc.getList("amenities", String.class));
 
-		System.out.println(">>>>>>>>>> service"+details.toString());
 		return details;
 	}
 
 	//TODO: Task 5
-
+	public String bookListing(BookingForm bookingForm, String id) {
+		// pass bookingForm to repo
+		lRepo.checkVacancy(bookingForm.getStay(), id);
+		return "";
+	}
 
 }
