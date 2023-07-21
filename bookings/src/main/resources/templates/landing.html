@@ -12,7 +12,7 @@
             <p>Country: </p>
             <span>
                 <select th:field="${form.country}">
-                    <option th:value="country1" th:text="country1"></option>
+                    <option th:each="country : ${countryList}" th:value="*{country}" th:text="*{country}"></option>
                 </select>
             </span>
         </div>

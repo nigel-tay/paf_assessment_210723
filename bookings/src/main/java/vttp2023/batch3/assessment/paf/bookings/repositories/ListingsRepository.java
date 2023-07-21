@@ -1,7 +1,12 @@
 package vttp2023.batch3.assessment.paf.bookings.repositories;
 
+import java.util.List;
+
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -27,11 +32,15 @@ public class ListingsRepository {
 		]
 		);
 	 */
-	public void getCountriesFromMongo() {
+	public List<Document> getCountriesFromMongo() {
 		// continue with query and check if it returns properly
+		GroupOperation go = Aggregation.group("address.country");
+		ProjectionOperation po = Aggregation.project("country");
+		Aggregation aggregation = Aggregation.newAggregation(go, po);
 
+		List<Document> countryDocumentList = mTemplate.aggregate(aggregation, "listings", Document.class).getMappedResults();
 
-		System.out.println();
+		return countryDocumentList;
 	}
 	
 	//TODO: Task 3
