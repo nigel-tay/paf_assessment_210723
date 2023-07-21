@@ -41,7 +41,6 @@ public class ListingsController {
 								@Valid Form form,
 								BindingResult bindingResult,
 								Model m) {
-		System.out.println(bindingResult.hasErrors());
 		if (bindingResult.hasErrors()) {
 			List<String> countryList = lService.getCountriesFromMongo();
 			m.addAttribute("countryList", countryList);
@@ -52,7 +51,10 @@ public class ListingsController {
 		String min = params.get("min");
 		String max = params.get("max");
 
-
+		if (lService.getListingsFromMongo(country, numberOfPerson, min, max) == null) {
+			// TO ADD ERROR PAGE WITH JSON ERROR LATER
+			return "error";
+		}
 		List<Listing> listingsList = lService.getListingsFromMongo(country, numberOfPerson, min, max);
 		m.addAttribute("country", country);
 		m.addAttribute("listingsList", listingsList);
