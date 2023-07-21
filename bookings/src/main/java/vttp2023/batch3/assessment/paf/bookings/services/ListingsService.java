@@ -93,6 +93,9 @@ public class ListingsService {
 
 			if (lRepo.insertReservation(newReservation)) {
 				// update vacancy
+				if (lRepo.updateVacancy(newReservation)) {
+					return resv_id;
+				}
 			}
 		}
 		return null;

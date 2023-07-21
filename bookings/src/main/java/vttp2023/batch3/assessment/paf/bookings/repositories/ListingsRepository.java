@@ -46,6 +46,18 @@ public class ListingsRepository {
 	private final String A_PRICE = "price";
 
 	private final String GET_VACANCY_SQL = "SELECT vacancy FROM acc_occupancy WHERE acc_id = ?";
+	private String INSERT_RESERVATION_SQL = 
+        """
+            INSERT INTO reservations (resv_id, name, email, acc_id, arrival_date, duration)
+            VALUES (?, ?, ?, ?, ?, ?);
+        """;
+	private String UPDATE_VACANCY_SQL = 
+		"""
+			UPDATE acc_occupancy
+			SET vacancy = vacancy - ?
+			WHERE acc_id = ?
+			AND vacancy > 0;
+		""";
 
 	//TODO: Task 2
 	/**
@@ -158,12 +170,6 @@ public class ListingsRepository {
 		return stay > vacancy ? false : true;
 	}
 
-	private String INSERT_RESERVATION_SQL = 
-        """
-            INSERT INTO reservations (resv_id, name, email, acc_id, arrival_date, duration)
-            VALUES (?, ?, ?, ?, ?, ?);
-        """;
-
     public boolean insertReservation(Reservation reservation) {
 
         String resv_id = reservation.getResv_id();
@@ -174,6 +180,15 @@ public class ListingsRepository {
 		Integer duration = reservation.getDuration();
         
         int result = jTemplate.update(INSERT_RESERVATION_SQL, resv_id, name, email, acc_id, arrivalDate, duration);
+		System.out.println(result);
+        return result > 0 ? true: false;
+    }
+
+    public boolean updateVacancy(Reservation reservation) {
+        
+		Integer duration = reservation.getDuration();
+		String acc_id = reservation.getAcc_id();
+        int result = jTemplate.update(UPDATE_VACANCY_SQL, duration, acc_id);
 		System.out.println(result);
         return result > 0 ? true: false;
     }

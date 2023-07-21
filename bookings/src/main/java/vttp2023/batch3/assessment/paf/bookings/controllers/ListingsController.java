@@ -103,10 +103,15 @@ public class ListingsController {
 
 	//TODO: Task 5
 	@PostMapping(path="/book", consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public String bookListing(@ModelAttribute BookingForm bookingForm, HttpSession session) {
+	public String bookListing(@ModelAttribute BookingForm bookingForm, HttpSession session, Model m) {
 		// Pass entire booking object to service
-		lService.bookListing(bookingForm, session.getAttribute("acc_id").toString());
-		return "";
+		String uuid = lService.bookListing(bookingForm, session.getAttribute("acc_id").toString());
+		if (uuid == null) {
+			return "error";
+		}
+		System.out.println(uuid);
+		m.addAttribute("uuid", uuid);
+		return "reference";
 	}
 
 }
