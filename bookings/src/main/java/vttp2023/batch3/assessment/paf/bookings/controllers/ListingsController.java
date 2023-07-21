@@ -7,16 +7,21 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import vttp2023.batch3.assessment.paf.bookings.models.BookingForm;
 import vttp2023.batch3.assessment.paf.bookings.models.Details;
 import vttp2023.batch3.assessment.paf.bookings.models.Form;
 import vttp2023.batch3.assessment.paf.bookings.models.Listing;
@@ -59,8 +64,6 @@ public class ListingsController {
 		String max = params.get("max");
 		
 		// adding query params into session to access in details page for back button
-		// /search?country=Spain&numberOfPerson=10&min=100&max=10000
-		
 		session.setAttribute("country", country);
 		session.setAttribute("numberOfPerson", numberOfPerson);
 		session.setAttribute("min", min);
@@ -92,10 +95,16 @@ public class ListingsController {
 		m.addAttribute("min", min);
 		m.addAttribute("max", max);
 		m.addAttribute("singleDetails", singleDetails);
+		m.addAttribute("bookingForm", new BookingForm());
 		return "details";
 	}
 
 	//TODO: Task 5
+	@PostMapping(path="/book", consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+	public String bookListing(@ModelAttribute BookingForm bookingForm) {
+		System.out.println(bookingForm.getEmail());
 
+		return "";
+	}
 
 }

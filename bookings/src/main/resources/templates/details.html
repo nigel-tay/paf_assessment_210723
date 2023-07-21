@@ -23,5 +23,39 @@
         <p>Amenitites: <span th:each="amenity: *{amenities}" th:text="${amenity}"></span>
         </p>
     </div>
+    <div>
+        <h1>Bookings</h1>
+        <form action="/book" method="POST" th:object="${bookingForm}" >
+            <div data-th-if="${#fields.hasErrors('name')}">
+                <span data-th-errors="*{name}" style="color: red; font-family: monospace;"></span>
+            </div>
+            <p>
+                Name:
+                <input type="text" th:field="*{name}" placeholder="Your name">
+            </p>
+            <div data-th-if="${#fields.hasErrors('email')}">
+                <span data-th-errors="*{email}" style="color: red; font-family: monospace;"></span>
+            </div>
+            <p>
+                Email:
+                <input type="email" th:field="*{email}" placeholder="Your email">
+            </p>
+            <div data-th-if="${#fields.hasErrors('date')}">
+                <span data-th-errors="*{date}" style="color: red; font-family: monospace;"></span>
+            </div>
+            <p>
+                Arrival:
+                <input type="date" th:field="*{arrival}">
+            </p>
+            <div data-th-if="${#fields.hasErrors('stay')}">
+                <span data-th-errors="*{stay}" style="color: red; font-family: monospace;"></span>
+            </div>
+            <p>
+                Stay:
+                <input type="text" th:field="*{stay}" placeholder="Duration of stay">
+            </p>
+            <input type="submit" placeholder="Book">
+        </form>
+    </div>
 </body>
 </html>
