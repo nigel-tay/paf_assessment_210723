@@ -82,7 +82,7 @@ public class ListingsRepository {
 		);
 	 */
 	public List<Document> getListingsFromMongo(String country, Integer numberOfPerson, Double min, Double max) {
-		Criteria criteria = Criteria.where(A_ADDRESS_COUNTRY).regex("australia", "i")
+		Criteria criteria = Criteria.where(A_ADDRESS_COUNTRY).regex(country, "i")
 									.and(A_ACCOMODATES).is(numberOfPerson)
 									.and(A_PRICE).gte(min).lte(max);
 		MatchOperation mo = Aggregation.match(criteria);

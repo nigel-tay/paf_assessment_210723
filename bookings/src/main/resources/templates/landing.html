@@ -7,26 +7,38 @@
 </head>
 <body>
     <h1>Search Our Accomodations</h1>
-    <form action="/search" method="GET" th:body="${form}">
+    <form action="/search" method="GET" th:object="${form}">
         <div>
+            <div data-th-if="${#fields.hasErrors('country')}">
+                <span data-th-errors="*{country}" style="color: red; font-family: monospace;"></span>
+            </div>
             <p>Country: </p>
             <span>
-                <select th:field="${form.country}">
-                    <option th:each="country : ${countryList}" th:value="*{country}" th:text="*{country}"></option>
+                <select th:field="*{country}">
+                    <option th:each="individualCountry : ${countryList}" th:value="${individualCountry}" th:text="${individualCountry}"></option>
                 </select>
             </span>
         </div>
         <div>
+            <div data-th-if="${#fields.hasErrors('numberOfPerson')}">
+                <span data-th-errors="*{numberOfPerson}" style="color: red; font-family: monospace;"></span>
+            </div>
             <p>Number of person: </p>
             <span>
-                <input type="text" th:field="${form.numberOfPerson}">
+                <input type="text" th:field="*{numberOfPerson}">
             </span>
         </div>
         <div>
             <p>Price Range: </p>
             <span>
-                <p>Min <input type="text" th:field="${form.min}"></p>
-                <p>Max <input type="text" th:field="${form.max}"></p>
+                <div data-th-if="${#fields.hasErrors('min')}">
+                    <span data-th-errors="*{min}" style="color: red; font-family: monospace;"></span>
+                </div>
+                <p>Min <input type="text" th:field="*{min}"></p>
+                <div data-th-if="${#fields.hasErrors('max')}">
+                    <span data-th-errors="*{max}" style="color: red; font-family: monospace;"></span>
+                </div>
+                <p>Max <input type="text" th:field="*{max}"></p>
             </span>
         </div>
         <input type="submit" placeholder="Search">
