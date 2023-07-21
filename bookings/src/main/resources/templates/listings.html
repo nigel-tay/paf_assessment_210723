@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listings</title>
+</head>
+<body>
+    <h1>Listings for <span th:text="${country}"></span></h1>
+    <div th:each="listing: ${listingsList}">
+        <span th:text="${listing.address}"></span>
+        <span th:text="${listing.price}"></span>
+        <img th:src="${listing.image}" alt="Listing image">
+        <form th:action="@{/details/{id}(id=${listing.id})}" method="GET">
+            <button type="submit">Details</button>
+        </form>
+    </div>
+</body>
+</html>
