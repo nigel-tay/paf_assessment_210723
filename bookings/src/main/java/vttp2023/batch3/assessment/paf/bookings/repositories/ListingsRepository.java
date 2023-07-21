@@ -25,7 +25,10 @@ public class ListingsRepository {
 	private final String A_ADDRESS_COUNTRY = "address.country";
 	private final String A_ACCOMODATES = "accommodates";
 	private final String A_ADDRESS = "address.street";
+	private final String A_ADDRESS_SUBURB = "address.suburb";
+	private final String A_AMENITITES = "amenities";
 	private final String A_COUNTRY = "country";
+	private final String A_DESCRIPTION = "description";
 	private final String A_ID = "_id";
 	private final String A_IMAGE = "images.picture_url";
 	private final String A_NAME = "name";
@@ -96,7 +99,52 @@ public class ListingsRepository {
 	}
 
 	//TODO: Task 4
-	
+	/**
+	 * db.getCollection('listings').aggregate(
+		[
+			{ $match: { _id: '12740176' } },
+			{
+			$project: {
+				_id: 1,
+				description: 1,
+				'address.street': 1,
+				'address.suburb': 1,
+				'address.country': 1,
+				'images.picture_url': 1,
+				price: 1,
+				amenities: 1
+			}
+			}
+		]
+		);
+	 */
+	public List<Document> getDetails(String id) {
+		Criteria criteria = Criteria.where(A_ID).is(id);
+		MatchOperation mo = Aggregation.match(criteria);
+		ProjectionOperation po = Aggregation.project(
+											A_ID,
+											A_DESCRIPTION,
+											A_ADDRESS,
+											A_ADDRESS_SUBURB,
+											A_ADDRESS_COUNTRY,
+											A_IMAGE,
+											A_PRICE,
+											A_AMENITITES);
+		Aggregation aggregation = Aggregation.newAggregation(mo, po);
+		List<Document> detailsList = mTemplate.aggregate(aggregation, C_LISTINGS, Document.class).getMappedResults();
+
+		System.out.println(">>>>>>>>>>>>>>> repository "+detailsList.get(0).toString());
+		return detailsList;
+	}
+
+		// A_ID
+	// A_DESCRIPTION
+	// A_ADDRESS
+	// A_ADDRESS_SUBURB
+	// A_ADDRESS_COUNTRY
+	// A_IMAGE
+	// A_PRICE
+	// A_AMENITITES
 
 	//TODO: Task 5
 

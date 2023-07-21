@@ -8,10 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.validation.Valid;
+import vttp2023.batch3.assessment.paf.bookings.models.Details;
 import vttp2023.batch3.assessment.paf.bookings.models.Form;
 import vttp2023.batch3.assessment.paf.bookings.models.Listing;
 import vttp2023.batch3.assessment.paf.bookings.repositories.ListingsRepository;
@@ -62,7 +64,13 @@ public class ListingsController {
 	}
 
 	//TODO: Task 4
-	
+	@GetMapping("/details/{id}")
+	public String getDetails(@PathVariable String id, Model m) {
+		Details singleDetails = lService.getDetails(id);
+		System.out.println(">>>>>>>>>> controller"+singleDetails.toString());
+		m.addAttribute("singleDetails", singleDetails);
+		return "details";
+	}
 
 	//TODO: Task 5
 

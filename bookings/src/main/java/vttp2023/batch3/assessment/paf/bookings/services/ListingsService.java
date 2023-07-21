@@ -7,6 +7,7 @@ import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import vttp2023.batch3.assessment.paf.bookings.models.Details;
 import vttp2023.batch3.assessment.paf.bookings.models.Listing;
 import vttp2023.batch3.assessment.paf.bookings.repositories.ListingsRepository;
 
@@ -53,7 +54,26 @@ public class ListingsService {
 	}
 
 	//TODO: Task 4
-	
+	public Details getDetails(String id) {
+		List<Document> detailsDocumentList = lRepo.getDetails(id);
+		if (detailsDocumentList.isEmpty()) {
+			return null;
+		}
+
+		Document detailsDoc = detailsDocumentList.get(0);
+		Details details = new Details();
+		details.setId(detailsDoc.getString("_id"));
+		details.setDescription(detailsDoc.getString("description"));
+		details.setStreetAddress(detailsDoc.getString("street"));
+		details.setSuburb(detailsDoc.getString("suburb"));
+		details.setCountry(detailsDoc.getString("country"));
+		details.setImage(detailsDoc.getString("picture_url"));
+		details.setPrice(detailsDoc.getDouble("price"));
+		details.setAmenities(detailsDoc.getList("amenities", String.class));
+
+		System.out.println(">>>>>>>>>> service"+details.toString());
+		return details;
+	}
 
 	//TODO: Task 5
 
