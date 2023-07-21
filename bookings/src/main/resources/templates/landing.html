@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page</title>
+</head>
+<body>
+    <h1>Search Our Accomodations</h1>
+    <form action="/search" method="GET" th:body="${form}">
+        <div>
+            <p>Country: </p>
+            <span>
+                <select th:field="${form.country}">
+                    <option th:value="country1" th:text="country1"></option>
+                </select>
+            </span>
+        </div>
+        <div>
+            <p>Number of person: </p>
+            <span>
+                <input type="text" th:field="${form.numberOfPerson}">
+            </span>
+        </div>
+        <div>
+            <p>Price Range: </p>
+            <span>
+                <p>Min <input type="text" th:field="${form.min}"></p>
+                <p>Max <input type="text" th:field="${form.max}"></p>
+            </span>
+        </div>
+        <input type="submit" placeholder="Search">
+    </form>
+</body>
+</html>
