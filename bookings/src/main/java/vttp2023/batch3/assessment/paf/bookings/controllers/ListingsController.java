@@ -1,5 +1,8 @@
 package vttp2023.batch3.assessment.paf.bookings.controllers;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import vttp2023.batch3.assessment.paf.bookings.models.Details;
 import vttp2023.batch3.assessment.paf.bookings.models.Form;
@@ -42,7 +46,8 @@ public class ListingsController {
 	public String getListings(@RequestParam Map<String, String> params,
 								@Valid Form form,
 								BindingResult bindingResult,
-								Model m) {
+								Model m,
+								HttpSession session) {
 		if (bindingResult.hasErrors()) {
 			List<String> countryList = lService.getCountriesFromMongo();
 			m.addAttribute("countryList", countryList);
@@ -52,6 +57,14 @@ public class ListingsController {
 		String numberOfPerson = params.get("numberOfPerson");
 		String min = params.get("min");
 		String max = params.get("max");
+		
+		// adding query params into session to access in details page for back button
+		// /search?country=Spain&numberOfPerson=10&min=100&max=10000
+		
+		session.setAttribute("country", country);
+		session.setAttribute("numberOfPerson", numberOfPerson);
+		session.setAttribute("min", min);
+		session.setAttribute("max", max);
 
 		if (lService.getListingsFromMongo(country, numberOfPerson, min, max) == null) {
 			// TO ADD ERROR PAGE WITH JSON ERROR LATER
@@ -60,14 +73,24 @@ public class ListingsController {
 		List<Listing> listingsList = lService.getListingsFromMongo(country, numberOfPerson, min, max);
 		m.addAttribute("country", country);
 		m.addAttribute("listingsList", listingsList);
+		System.out.println(session.getAttribute("search"));
 		return "listings";
 	}
 
 	//TODO: Task 4
 	@GetMapping("/details/{id}")
-	public String getDetails(@PathVariable String id, Model m) {
+	public String getDetails(@PathVariable String id, Model m, HttpSession session) {
 		Details singleDetails = lService.getDetails(id);
-		System.out.println(">>>>>>>>>> controller"+singleDetails.toString());
+
+		String country = session.getAttribute("country").toString();
+		String numberOfPerson = session.getAttribute("numberOfPerson").toString();
+		String min = session.getAttribute("min").toString();
+		String max = session.getAttribute("max").toString();
+		
+		m.addAttribute("country", country);
+		m.addAttribute("numberOfPerson", numberOfPerson);
+		m.addAttribute("min", min);
+		m.addAttribute("max", max);
 		m.addAttribute("singleDetails", singleDetails);
 		return "details";
 	}

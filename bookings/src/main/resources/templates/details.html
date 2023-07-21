@@ -6,6 +6,9 @@
     <title>Listing Details</title>
 </head>
 <body>
+    <a th:href="@{/search?country={country}&numberOfPerson={numberOfPerson}&min={min}&max={max}(country=${country}, numberOfPerson=${numberOfPerson}, min=${min}, max=${max})}">
+        back
+    </a>
     <div th:object="${singleDetails}">
         <p>ID: <span th:text="*{id}"></span></p>
         <p>
@@ -19,12 +22,6 @@
         <p>Price: <span th:text="*{price}"></span></p>
         <p>Amenitites: <span th:each="amenity: *{amenities}" th:text="${amenity}"></span>
         </p>
-
-
-
-        <!-- <form th:action="@{/details/{id}(id=${listing.id})}" method="GET">
-            <button type="submit">Details</button>
-        </form> -->
     </div>
 </body>
 </html>
